@@ -1,0 +1,21 @@
+# Set the folder to monitor and size threshold
+$FolderPath = "D:\YourFolder"
+$DriveLetter = "D:"
+$Threshold = 90  # Set threshold percentage
+
+# Get drive utilization
+$drive = Get-PSDrive -Name $DriveLetter
+$usedSpacePercentage = ($drive.Used / $drive.Size) * 100
+
+if ($usedSpacePercentage -ge $Threshold) {
+    Write-Output "Drive usage is $([math]::Round($usedSpacePercentage, 2))%, starting cleanup."
+    
+    # Delete files older than 30 days (modify as needed)
+    Get-ChildItem -Path $FolderPath -Recurse -File | Where-Object {
+        $_.LastWriteTime -lt (Get-Date).AddDays(-30)
+    } | Remove-Item -Force
+    
+    Write-Output "Cleanup completed."
+} else {
+    Write-Output "Drive usage is $([math]::Round($usedSpacePercentage, 2))%, no cleanup required."
+}
