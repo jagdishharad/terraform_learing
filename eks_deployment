@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: '5'
+    kubectl.kubernetes.io/last-applied-configuration: >
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app.kubernetes.io/instance":"res-onesource","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"res-onesource","app.kubernetes.io/version":"1.16.0","argocd.argoproj.io/instance":"res-onesource","helm.sh/chart":"res-onesource-0.1.0"},"name":"res-onesource","namespace":"res-nucleus-prod"},"spec":{"replicas":1,"selector":{"matchLabels":{"app.kubernetes.io/instance":"res-onesource","app.kubernetes.io/name":"res-onesource"}},"template":{"metadata":{"annotations":{"vault.hashicorp.com/agent-init-first":"true","vault.hashicorp.com/agent-inject":"true","vault.hashicorp.com/agent-inject-secret-credentials.txt":"secret/research/nucleus/res-onesource/prod","vault.hashicorp.com/agent-inject-template-credentials.txt":"{{
+      with secret \"secret/research/nucleus/res-onesource/prod\" }}\n  {{ range
+      $k, $v := .Data }}\n    export {{ $k }}={{ $v }}\n  {{ end }}\n{{ end
+      }}","vault.hashicorp.com/auth-path":"auth/arn:aws:eks:ap-south-1:399625629242:cluster/upper-ct-apps-ap-south-1-eks-caas-04","vault.hashicorp.com/role":"res-onesource"},"labels":{"app":"nucleus","app.kubernetes.io/instance":"res-onesource","app.kubernetes.io/name":"res-onesource","bu":"research","env":"prod","logging":"true","svc":"res-onesource"}},"spec":{"containers":[{"args":["-c","source
+      /vault/secrets/credentials.txt \u0026\u0026
+      /app/start.sh"],"command":["bash"],"env":[{"name":"TZ","value":"Asia/Calcutta"}],"image":"as1-harbor.crisil.local/research-nucleus/application/release/res_onesource:361411","imagePullPolicy":"IfNotPresent","name":"res-onesource","ports":[{"containerPort":9073,"name":"http","protocol":"TCP"}],"resources":{},"securityContext":{}}],"imagePullSecrets":[{"name":"crisil-regcred"}],"securityContext":{},"serviceAccountName":"res-onesource"}}}}
+    kyverno.io/verify-images: >-
+      {"as1-harbor.crisil.local/research-nucleus/application/release/res_onesource:361411":"pass"}
+  creationTimestamp: '2024-07-20T05:32:11Z'
+  generation: 7
+  labels:
+    app.kubernetes.io/instance: res-onesource
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: res-onesource
+    app.kubernetes.io/version: 1.16.0
+    argocd.argoproj.io/instance: res-onesource
+    helm.sh/chart: res-onesource-0.1.0
+  name: res-onesource
+  namespace: res-nucleus-prod
+  resourceVersion: '183980435'
+  uid: b72d596b-7f96-4c92-b6e8-3def50877df5
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: res-onesource
+      app.kubernetes.io/name: res-onesource
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: '2024-10-04T13:54:15Z'
+        vault.hashicorp.com/agent-init-first: 'true'
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/agent-inject-secret-credentials.txt: secret/research/nucleus/res-onesource/prod
+        vault.hashicorp.com/agent-inject-template-credentials.txt: |-
+          {{ with secret "secret/research/nucleus/res-onesource/prod" }}
+            {{ range $k, $v := .Data }}
+              export {{ $k }}={{ $v }}
+            {{ end }}
+          {{ end }}
+        vault.hashicorp.com/auth-path: >-
+          auth/arn:aws:eks:ap-south-1:399625629242:cluster/upper-ct-apps-ap-south-1-eks-caas-04
+        vault.hashicorp.com/role: res-onesource
+      creationTimestamp: null
+      labels:
+        app: nucleus
+        app.kubernetes.io/instance: res-onesource
+        app.kubernetes.io/name: res-onesource
+        bu: research
+        env: prod
+        logging: 'true'
+        svc: res-onesource
+    spec:
+      containers:
+        - args:
+            - '-c'
+            - source /vault/secrets/credentials.txt && /app/start.sh
+          command:
+            - bash
+          env:
+            - name: TZ
+              value: Asia/Calcutta
+          image: >-
+            as1-harbor.crisil.local/research-nucleus/application/release/res_onesource:361411
+          imagePullPolicy: IfNotPresent
+          name: res-onesource
+          ports:
+            - containerPort: 9073
+              name: http
+              protocol: TCP
+          resources: {}
+          securityContext: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: crisil-regcred
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: res-onesource
+      serviceAccountName: res-onesource
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+    - lastTransitionTime: '2024-07-20T05:32:11Z'
+      lastUpdateTime: '2024-11-28T15:53:42Z'
+      message: ReplicaSet "res-onesource-76fb5fc4b" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: 'True'
+      type: Progressing
+    - lastTransitionTime: '2024-12-14T09:19:18Z'
+      lastUpdateTime: '2024-12-14T09:19:18Z'
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: 'True'
+      type: Available
+  observedGeneration: 7
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
